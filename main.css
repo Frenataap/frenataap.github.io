@@ -22,6 +22,7 @@ body {
   height: fit-content;
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
+  overflow-x: hidden;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
