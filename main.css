@@ -817,7 +817,7 @@ div#childLinkmodal {
   height: fit-content;
   background-color: rgba(243, 238, 234, 0.5);
   border: 3px solid var(--ColorThird);
-  left: 50%;
+  left: 80%;
   top: 10%;
   transform: translateX(-50%);
   z-index: 100;
