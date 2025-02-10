@@ -546,6 +546,7 @@ section#myproject > div > div {
   align-items: center;
   flex: 1 0 500px;
   height: 50vh;
+  border: 1px solid red;
 }
 
 section#myproject > div > div:nth-child(1) {
@@ -553,7 +554,7 @@ section#myproject > div > div:nth-child(1) {
 }
 
 section#myproject > div > div:nth-child(1) > div:nth-child(1) {
-  font-size: 4vh;
+  font-size: 3vh;
   color: var(--ColorFourth);
   text-align: center;
   padding: 20px;
