@@ -106,7 +106,7 @@ const arrayDataskills = [
   },
 
   {
-    skills: "Ms. Word",
+    skills: "Ms. Excel",
     rate: 4,
   },
   {

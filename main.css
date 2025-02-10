@@ -944,14 +944,13 @@ section#mysocial > div > div:nth-child(3) > div:nth-child(1) {
 section#mysocial > div > div:nth-child(3) > div:nth-child(2) {
   position: fixed;
   display: none;
-  width: 50%;
+  width: 80%;
   height: fit-content;
   background-color: rgba(243, 238, 234, 0.5);
   border: 3px solid var(--ColorThird);
-  left: 25%;
+  left: 50%;
+  transform: translateX(-50%);
   top: 10%;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
   z-index: 100;
   flex-direction: column;
   border-radius: var(--BorderRadius);
@@ -959,12 +958,6 @@ section#mysocial > div > div:nth-child(3) > div:nth-child(2) {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-weight: bold;
-  /* -webkit-font-smoothing: antialiased;
-  backface-visibility: hidden; */
-  /* -webkit-filter: blur(0.000001px);
-  -webkit-font-smoothing: subpixel-antialiased; */
-  /* -webkit-transform: translateZ(0);
-  transform: translateZ(0); */
 }
 
 .modalFadeIn {
