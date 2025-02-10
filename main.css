@@ -546,7 +546,6 @@ section#myproject > div > div {
   align-items: center;
   flex: 1 0 290px;
   height: 50vh;
-  border: 1px solid red;
 }
 
 section#myproject > div > div:nth-child(1) {
@@ -1206,7 +1205,6 @@ section#mysocial > div > div:nth-child(2) > div:nth-child(even)::before {
     position: absolute;
     width: 80%;
     height: fit-content;
-    border: 1px solid rgb(187, 255, 0);
     z-index: 3;
   }
   section#myproject > div > div > div > div:nth-child(1) > div:nth-child(1) {
@@ -1235,6 +1233,9 @@ section#mysocial > div > div:nth-child(2) > div:nth-child(even)::before {
   section#mysocial > div > div:nth-child(3) > div {
     margin: 0;
     font-size: 1.5vh;
+  }
+  section#mysocial > div > div:nth-child(2) > div > span {
+    font-size: 1vh;
   }
 }
 
