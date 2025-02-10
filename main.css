@@ -544,7 +544,7 @@ section#myproject > div > div {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1 0 500px;
+  flex: 1 0 300px;
   height: 50vh;
   border: 1px solid red;
 }
