@@ -1,0 +1,104 @@
+:root {
+  --pColor: rgb(36, 54, 66);
+  --sColor: rgb(56, 116, 120);
+  --tColor: rgb(98, 149, 132);
+  --fColor: rgb(226, 241, 231);
+}
+
+@font-face {
+  font-family: jawa;
+  src: url("assets/font/jawa/jawa.woff");
+}
+
+@font-face {
+  font-family: jawaA;
+  src: url("assets/font/AksaraSastrajendra-EaJ6j.otf");
+}
+
+@font-face {
+  font-family: jawaB;
+  src: url("assets/font/Jawadwipa.woff");
+}
+
+@font-face {
+  font-family: jawaC;
+  src: url("assets/font/KemasyuranJawaRegular-nYMJ.woff");
+}
+
+@font-face {
+  font-family: jawaD;
+  src: url("assets/font/Upakarti-yxqe.woff");
+}
+
+.playwrite-mx-guides-regular {
+  font-family: "Playwrite MX Guides", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.fontJawa {
+  font-family: jawaC;
+}
+
+.pacifico-regular {
+  font-family: "Pacifico", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.noto-sans-javanese-sans-serif {
+  font-family: "Noto Sans Javanese", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.mycssPcolor {
+  background-color: var(--pColor) !important;
+  color: var(--fColor) !important;
+}
+
+.mycssScolor {
+  background-color: var(--sColor) !important;
+  color: var(--fColor) !important;
+}
+
+.mycssTcolor {
+  background-color: var(--tColor) !important;
+  color: var(--fColor) !important;
+}
+
+.mycssTextpcolor {
+  color: var(--pColor) !important;
+}
+
+.mycssTextscolor {
+  color: var(--sColor) !important;
+}
+
+.mycssFontsize {
+  font-size: 9pt;
+}
+
+.myHideOF {
+  height: 0;
+  transition: height 1s ease-in-out;
+}
+
+.mySeekOF {
+  height: 40px;
+}
+
+.myAniprogress {
+  animation: aniProgress 2s linear;
+}
+
+@keyframes aniProgress {
+  from {
+    width: 0;
+  }
+}
