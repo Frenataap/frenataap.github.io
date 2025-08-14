@@ -36,6 +36,10 @@
   font-style: normal;
 }
 
+/* * {
+  border: 2px solid green;
+} */
+
 body {
   overflow-x: hidden;
 }
@@ -95,6 +99,10 @@ body {
 
 .myAniprogress {
   animation: aniProgress 2s linear;
+}
+
+.myfontsize {
+  font-size: 0.8em;
 }
 
 @keyframes aniProgress {
