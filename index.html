@@ -1,0 +1,1762 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio</title>
+    <style>
+      /* ==================== VARIABLES & THEME ==================== */
+      :root {
+        --bg-color: #f8fafc;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --card-bg: rgba(255, 255, 255, 0.7);
+        --border-color: rgba(0, 0, 0, 0.1);
+        --shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --radius: 16px;
+        --transition: all 0.3s ease;
+      }
+
+      [data-theme="dark"] {
+        --bg-color: #0f172a;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --primary: #60a5fa;
+        --primary-hover: #3b82f6;
+        --card-bg: rgba(30, 41, 59, 0.7);
+        --border-color: rgba(255, 255, 255, 0.1);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+      }
+
+      /* ==================== GLOBAL ==================== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        line-height: 1.6;
+        transition: var(--transition);
+        overflow-x: hidden;
+      }
+
+      /* Custom Cursor */
+      /* ==================== CUSTOM CURSOR: MATAHARI ==================== */
+      .cursor {
+        width: 16px;
+        height: 16px;
+        /* Membuat warna inti terang dan tepi oranye */
+        background: radial-gradient(circle, #ffffff 10%, #f8ff95 90%);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        /* Efek cahaya berpendar */
+        box-shadow:
+          0 0 10px #fffc42,
+          0 0 20px #ffd152;
+        transition:
+          width 0.3s,
+          height 0.3s,
+          background 0.3s,
+          box-shadow 0.3s;
+      }
+
+      /* State saat Hover: Matahari bersinar terang dan akan meledak */
+      .cursor.hovering {
+        width: 50px;
+        height: 50px;
+        /* Inti menjadi putih sangat terang, tepi menjadi merah/oranye intens */
+        background: radial-gradient(
+          circle,
+          #ffffff 15%,
+          #fff7b1 40%,
+          #fffed1 90%
+        );
+        box-shadow:
+          0 0 20px #ffeb3b,
+          0 0 40px #f44336,
+          0 0 60px #ffffff;
+        /* Memanggil animasi bergetar/berdenyut cepat */
+        animation: explodePulse 0.09s infinite alternate;
+      }
+
+      /* Animasi berdenyut cepat menyerupai energi yang tidak stabil */
+      @keyframes explodePulse {
+        0% {
+          transform: translate(-50%, -50%) scale(0.9);
+          filter: brightness(1);
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1.1);
+          filter: brightness(1.4);
+        }
+      }
+
+      /* .cursor {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--primary);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.2s,
+          height 0.2s,
+          background-color 0.2s;
+      }
+      .cursor.hovering {
+        width: 40px;
+        height: 40px;
+        background-color: rgba(59, 130, 246, 0.1);
+      } */
+
+      /* Custom Cursor - Opsi 1: Dot to Glass */
+      /* .cursor {
+        width: 12px;
+        height: 12px;
+        background-color: var(--primary);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          background-color 0.3s;
+      }
+      .cursor.hovering {
+        width: 50px;
+        height: 50px;
+        background-color: rgba(59, 130, 246, 0.1);
+        border: 1px solid var(--primary);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+      } */
+
+      /* Loading Screen */
+      #loader {
+        position: fixed;
+        inset: 0;
+        background: var(--bg-color);
+        z-index: 10000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.5s;
+      }
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid var(--border-color);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Typography & Utility */
+      h1,
+      h2,
+      h3 {
+        color: var(--text-main);
+      }
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      section {
+        padding: 100px 0;
+      }
+
+      /* Glassmorphism Card */
+      .glass-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 20px;
+        transition: var(--transition);
+      }
+      .glass-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Buttons & Ripple */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--primary);
+        color: var(--primary);
+      }
+      .btn-outline:hover {
+        background: var(--primary);
+        color: white;
+      }
+
+      .ripple {
+        position: absolute;
+        border-radius: 50%;
+        transform: scale(0);
+        animation: ripple-anim 0.6s linear;
+        background-color: rgba(255, 255, 255, 0.4);
+      }
+      @keyframes ripple-anim {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+      /* Animations */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ==================== NAVBAR ==================== */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+        transition: var(--transition);
+      }
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary);
+        text-decoration: none;
+      }
+      .nav-links {
+        display: flex;
+        gap: 20px;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--text-main);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+        position: relative;
+      }
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: var(--primary);
+        transition: var(--transition);
+      }
+      .nav-links a:hover::after,
+      .nav-links a.active::after {
+        width: 100%;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: var(--primary);
+      }
+
+      .nav-actions {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+      .theme-toggle {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: var(--text-main);
+      }
+
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+      }
+      .hamburger span {
+        width: 25px;
+        height: 3px;
+        background: var(--text-main);
+        transition: 0.3s;
+      }
+
+      /* ==================== HERO ==================== */
+      #hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding-top: 80px;
+      }
+      .hero-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+        border: 4px solid var(--primary);
+      }
+      .hero-name {
+        font-size: 3rem;
+        margin-bottom: 10px;
+      }
+      .hero-prof {
+        font-size: 1.5rem;
+        color: var(--primary);
+        margin-bottom: 20px;
+        min-height: 36px;
+      }
+      .hero-desc {
+        max-width: 600px;
+        margin: 0 auto 30px auto;
+        color: var(--text-muted);
+      }
+      .hero-btns {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+      }
+
+      /* ==================== ABOUT & SKILLS ==================== */
+      .about-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        font-size: 1.1rem;
+        color: var(--text-muted);
+      }
+
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+      }
+      .skill-item {
+        margin-bottom: 15px;
+      }
+      .skill-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+      .progress-bar {
+        width: 100%;
+        height: 10px;
+        background: var(--border-color);
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      .progress {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 5px;
+        width: 0;
+        transition: width 1.5s ease-in-out;
+      }
+
+      /* ==================== TIMELINE (EXPERIENCE & EDUCATION) ==================== */
+      .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 100%;
+        background: var(--border-color);
+      }
+      .timeline-item {
+        width: 50%;
+        padding: 20px 40px;
+        position: relative;
+      }
+      .timeline-item:nth-child(odd) {
+        left: 0;
+        text-align: right;
+      }
+      .timeline-item:nth-child(even) {
+        left: 50%;
+      }
+      .timeline-dot {
+        width: 20px;
+        height: 20px;
+        background: var(--primary);
+        border-radius: 50%;
+        position: absolute;
+        top: 30px;
+        right: -10px;
+        z-index: 1;
+      }
+      .timeline-item:nth-child(even) .timeline-dot {
+        left: -10px;
+      }
+      .timeline-date {
+        color: var(--primary);
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      /* ==================== PROJECTS ==================== */
+      .project-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      .filter-btns {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .filter-btn {
+        padding: 8px 16px;
+        border: 1px solid var(--border-color);
+        background: transparent;
+        color: var(--text-main);
+        border-radius: 20px;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .filter-btn.active,
+      .filter-btn:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+      .search-box {
+        padding: 10px 20px;
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        background: var(--card-bg);
+        color: var(--text-main);
+        outline: none;
+      }
+
+      .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+      }
+      .project-card {
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .project-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.5s;
+      }
+      .project-card:hover .project-img {
+        transform: scale(1.05);
+      }
+      .project-body {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .project-tags {
+        font-size: 0.8rem;
+        color: var(--primary);
+        margin-bottom: 10px;
+      }
+      .project-title {
+        margin-bottom: 10px;
+      }
+      .project-desc {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        flex-grow: 1;
+      }
+      .project-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      /* ==================== STATISTICS ==================== */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        text-align: center;
+      }
+      .stat-number {
+        font-size: 3rem;
+        font-weight: bold;
+        color: var(--primary);
+        margin-bottom: 10px;
+      }
+
+      /* ==================== CERTIFICATES ==================== */
+      .cert-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+      .cert-card img {
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+
+      /* ==================== TESTIMONIALS ==================== */
+      .testimonial-slider {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .testi-slide {
+        display: none;
+        animation: fadeIn 0.5s;
+      }
+      .testi-slide.active {
+        display: block;
+      }
+      .testi-text {
+        font-style: italic;
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+      }
+      .testi-author {
+        font-weight: bold;
+        color: var(--primary);
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* ==================== CONTACT & FOOTER ==================== */
+      .contact-grid {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+      }
+      .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: var(--text-main);
+        font-size: 1.1rem;
+        transition: var(--transition);
+        padding: 15px 25px;
+        border-radius: 30px;
+      }
+      .contact-item:hover {
+        color: var(--primary);
+        background: var(--border-color);
+      }
+      .contact-icon {
+        width: 24px;
+        height: 24px;
+        fill: currentColor;
+      }
+
+      footer {
+        text-align: center;
+        padding: 30px;
+        border-top: 1px solid var(--border-color);
+        margin-top: 50px;
+        color: var(--text-muted);
+      }
+      .footer-actions {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      /* ==================== MODAL & TOAST ==================== */
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .modal.active {
+        display: flex;
+        opacity: 1;
+      }
+      .modal-content {
+        background: var(--bg-color);
+        width: 100%;
+        max-width: 600px;
+        border-radius: var(--radius);
+        padding: 30px;
+        position: relative;
+        transform: translateY(-50px);
+        transition: transform 0.3s;
+        max-height: 90vh; /* Membatasi tinggi maksimal 90% layar */
+      }
+      .modal.active .modal-content {
+        transform: translateY(0);
+      }
+      .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: var(--text-main);
+      }
+
+      /* ==================== TOAST (IPHONE STYLE) ==================== */
+      .toast-container {
+        position: fixed;
+        top: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+        pointer-events: none; /* Agar tidak mengganggu klik di sekitarnya */
+      }
+
+      .toast {
+        background: rgba(20, 20, 20, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: #ffffff;
+        padding: 14px 24px;
+        border-radius: 50px; /* Bentuk kapsul ala Dynamic Island */
+        box-shadow:
+          0 15px 35px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        transform-origin: top center;
+        animation:
+          dynamicIslandDrop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+          dynamicIslandHide 0.5s 3.5s cubic-bezier(0.36, 0, 0.66, -0.56)
+            forwards;
+      }
+
+      /* Penyesuaian tema jika di Light/Dark Mode */
+      [data-theme="dark"] .toast {
+        background: rgba(240, 240, 240, 0.85);
+        color: #000000;
+        box-shadow:
+          0 15px 35px rgba(0, 0, 0, 0.5),
+          0 0 0 1px rgba(0, 0, 0, 0.1);
+      }
+
+      @keyframes dynamicIslandDrop {
+        0% {
+          transform: translateY(-50px) scale(0.5);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+      }
+      @keyframes dynamicIslandHide {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-50px) scale(0.5);
+          opacity: 0;
+        }
+      }
+
+      /* .toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .toast {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        color: var(--text-main);
+        padding: 12px 24px;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary);
+        box-shadow: var(--shadow);
+        animation:
+          slideIn 0.3s,
+          fadeOut 0.3s 2.7s forwards;
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+        }
+      } */
+
+      /* Back to top */
+      #back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: var(--primary);
+        color: white;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+      #back-to-top:hover {
+        transform: translateY(-5px);
+        background: var(--primary-hover);
+      }
+
+      /* ==================== MEDIA QUERIES & PRINT ==================== */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: flex;
+        }
+        .nav-links {
+          position: fixed;
+          top: 70px;
+          right: -100%;
+          flex-direction: column;
+          background: var(--card-bg);
+          backdrop-filter: blur(15px);
+          width: 100%;
+          text-align: center;
+          padding: 20px 0;
+          transition: 0.3s;
+          border-bottom: 1px solid var(--border-color);
+        }
+        .nav-links.active {
+          right: 0;
+        }
+        .timeline::before {
+          left: 30px;
+        }
+        .timeline-item {
+          width: 100%;
+          padding-left: 70px;
+          padding-right: 20px;
+        }
+        .timeline-item:nth-child(even),
+        .timeline-item:nth-child(odd) {
+          left: 0;
+          text-align: left;
+        }
+        .timeline-dot {
+          left: 20px !important;
+        }
+        .cursor {
+          display: none;
+        } /* Disable custom cursor on mobile */
+      }
+
+      @media print {
+        body {
+          background: white;
+          color: black;
+        }
+        nav,
+        #back-to-top,
+        .theme-toggle,
+        .project-controls,
+        .contact-item {
+          display: none !important;
+        }
+        .glass-card {
+          border: 1px solid #ccc;
+          box-shadow: none;
+          break-inside: avoid;
+        }
+        .timeline::before {
+          left: 0;
+        }
+        section {
+          padding: 20px 0;
+          page-break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader"><div class="spinner"></div></div>
+
+    <div class="cursor" id="cursor"></div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <nav id="navbar">
+      <div class="nav-container">
+        <a href="#" class="logo" id="nav-logo">Portofolio.</a>
+        <ul class="nav-links" id="nav-links"></ul>
+        <div class="nav-actions">
+          <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M21 12.79A9 9 0 1 1 11.21 3c0 .34.02.67.06 1A7 7 0 0 0 20 12.73c.33.04.66.06 1 .06z"
+              />
+            </svg>
+          </button>
+          <button class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main id="app-content"></main>
+
+    <footer id="footer">
+      <div class="container">
+        <p id="footer-text"></p>
+        <div class="footer-actions">
+          <!-- <button class="btn btn-outline btn-sm" onclick="window.print()">🖨️ Print Portfolio</button> -->
+        </div>
+      </div>
+    </footer>
+
+    <button id="back-to-top" title="Back to Top">↑</button>
+
+    <div id="project-modal" class="modal">
+      <div class="modal-content glass-card">
+        <button class="close-modal" id="close-modal">&times;</button>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+
+    <script>
+      /* =========================================================================
+           1. DATA PENGATURAN (OBJECT UTAMA)
+           ========================================================================= */
+      const portfolio = {
+        profile: {
+          name: "Frenata Anggoro Putera",
+          profession: ["Junior Web Developer", "Programmer", "Freelance"],
+          description:
+            "Seorang web developer pemula yang bersemangat untuk memasuki industri profesional. Berbasis di Batam, saya memiliki ketertarikan kuat dalam membangun aplikasi web modern yang interaktif, responsif, dan memberikan pengalaman pengguna yang sangat baik.",
+          image: "assets/foto-profile-c.jpg",
+          cv: "assets/CV FrenataAP 2026-IT.pdf",
+        },
+
+        about:
+          "Saya berdomisili di Batam, Kepulauan Riau. Fokus utama saya saat ini adalah mengembangkan keterampilan dalam teknologi Front-End dan Back-End. Saya selalu antusias untuk belajar hal-hal baru dari para ahli di industri ini dan berharap dapat bekerja dalam tim pengembangan perangkat lunak yang profesional untuk berkontribusi menciptakan solusi digital terbaik.",
+
+        skills: [
+          { name: "HTML5", level: 90 },
+          { name: "CSS3", level: 85 },
+          { name: "JavaScript (ES6+)", level: 80 },
+          { name: "React.js", level: 75 },
+          { name: "Node.js", level: 70 },
+          { name: "Express.js", level: 70 },
+          { name: "Google Apps Script", level: 65 },
+          { name: "Database (SQL/NoSQL)", level: 80 },
+          { name: "UI/UX Design", level: 50 },
+        ],
+
+        experiences: [
+          {
+            year: "2024 - Sekarang",
+            role: "Freelance Web Developer",
+            company: "Self-Employed",
+            description:
+              "Membangun berbagai proyek web pribadi dan freelance, fokus pada antarmuka pengguna yang responsif dan optimasi performa.",
+          },
+          {
+            year: "2023 - 2024",
+            role: "Web Development Learner",
+            company: "Self-Taught / Final Project",
+            description:
+              "Mempelajari dasar-dasar pemrograman web, algoritma, dan arsitektur database modern.",
+          },
+        ],
+
+        projects: [
+          {
+            title: "Mapping Orphanage & Donation Platform",
+            category: "Web App",
+            image: "assets/proyek-a.jpg",
+            description:
+              "Aplikasi web untuk pemetaan panti asuhan dan platform donasi, memungkinkan pengguna untuk menemukan panti asuhan terdekat dan memberikan donasi secara online.",
+            tech: "PHP, Booststrap, CodeIgniter, Leaflet.JS, MySQL",
+            demo: "#",
+            github: "#",
+          },
+          {
+            title: "Point Of Sale",
+            category: "Web App",
+            image: "assets/proyek-b.png",
+            description:
+              "Sistem Point of Sale berbasis web untuk toko retail, dengan fitur manajemen, transaksi penjualan, dan laporan penjualan.",
+            tech: "PHP, Tailwind, Laravel, MySQL",
+            demo: "#",
+            github: "#",
+          },
+          {
+            title: "Daily Report Quality Assurance Manufacture",
+            category: "Web App",
+            image: "assets/proyek-c.jpg",
+            description:
+              "Aplikasi web untuk laporan harian Quality Assurance di lingkungan manufaktur, memungkinkan tim QA untuk mencatat dan melacak hasil inspeksi secara efisien.",
+            tech: "Bootstrap, Node.JS, Express.JS, MongoDB",
+            demo: "#",
+            github: "#",
+          },
+        ],
+
+        certificates: [
+          {
+            title: "Android Developer Associate",
+            image: "assets/sertifikat-a.png",
+          },
+          {
+            title: "Comming Soon",
+            image: "assets/sertifikat-a.png",
+          },
+        ],
+
+        education: [
+          {
+            year: "2019 - 2024",
+            degree: "D3 Teknik Informatika",
+            school: "Politeknik Negeri Batam",
+            description:
+              "Lulus dengan IPK 3.11. Aktif dalam belajar pengembangan web dan aplikasi mobile selama masa studi.",
+          },
+          {
+            year: "2016 - 2019",
+            degree: "SMA IPA",
+            school: "SMA Negeri 1 Sukomoro",
+            description:
+              "Aktif dalam kegiatan organisasi sekolah dan mengikuti beberapa lomba sains tingkat kabupaten.",
+          },
+        ],
+
+        testimonials: [
+          {
+            text: "Hasil kerja sangat memuaskan, profesional dan sesuai dengan kebutuhan proyek.",
+            author: "Klien Freelance",
+          },
+          {
+            text: "Hasil desain sangat memuaskan, modern dan sesuai dengan tren terkini.",
+            author: "Klien Freelance",
+          },
+        ],
+
+        statistics: {
+          "Tahun Pengalaman": "1+",
+          "Project Selesai": "3",
+          Sertifikat: "1",
+          "Kopi Diminum": "999+",
+        },
+
+        contacts: {
+          email: "frenata.ap@gmail.com",
+          whatsapp: "Rahasia",
+          linkedin: "https://linkedin.com/in/frenata-anggoro-putera",
+          github: "https://github.com/FrenataAP",
+          instagram: "https://instagram.com/frenataap",
+        },
+
+        // Konfigurasi Menu Navbar (Sesuai urutan section)
+        menu: [
+          { id: "hero", label: "Beranda" },
+          { id: "about", label: "Tentang" },
+          { id: "skills", label: "Keahlian" },
+          { id: "experience", label: "Pengalaman" },
+          { id: "projects", label: "Project" },
+          { id: "contact", label: "Kontak" },
+        ],
+      };
+
+      /* =========================================================================
+           2. RENDER FUNCTIONS (HTML GENERATORS)
+           ========================================================================= */
+      const app = document.getElementById("app-content");
+
+      // Helper Icon SVG (Inline)
+      const icons = {
+        email: `<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
+        whatsapp: `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>`,
+        linkedin: `<svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>`,
+        github: `<svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>`,
+        instagram: `<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>`,
+      };
+
+      const renderNavbar = () => {
+        const navLinks = document.getElementById("nav-links");
+        navLinks.innerHTML = portfolio.menu
+          .map((item) => `<li><a href="#${item.id}">${item.label}</a></li>`)
+          .join("");
+        document.getElementById("nav-logo").textContent =
+          portfolio.profile.name + ".";
+      };
+
+      const renderHero = () => `
+            <section id="hero" class="fade-in">
+                <div class="container">
+                    <img src="${portfolio.profile.image}" alt="Profile" class="hero-img" loading="lazy">
+                    <h1 class="hero-name">Halo, saya <br>${portfolio.profile.name}</h1>
+                    <h2 class="hero-prof"><span id="typing-text"></span><span class="cursor-blink">|</span></h2>
+                    <p class="hero-desc">${portfolio.profile.description}</p>
+                    <div class="hero-btns">
+                        <a href="${portfolio.profile.cv}" download class="btn btn-primary ripple-effect">Download CV</a>
+                        <a href="#contact" class="btn btn-outline ripple-effect">Hubungi Saya</a>
+                    </div>
+                </div>
+            </section>
+        `;
+
+      const renderAbout = () => `
+            <section id="about" class="fade-in">
+                <div class="container glass-card">
+                    <h2 class="section-title">Tentang Saya</h2>
+                    <p class="about-content">${portfolio.about}</p>
+                </div>
+            </section>
+        `;
+
+      const renderSkills = () => `
+            <section id="skills" class="fade-in">
+                <div class="container">
+                    <h2 class="section-title">Keahlian</h2>
+                    <div class="skills-grid">
+                        ${portfolio.skills
+                          .map(
+                            (skill) => `
+                            <div class="skill-item glass-card">
+                                <div class="skill-info">
+                                    <span>${skill.name}</span>
+                                    <span>${skill.level}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" data-width="${skill.level}%"></div>
+                                </div>
+                            </div>
+                        `,
+                          )
+                          .join("")}
+                    </div>
+                </div>
+            </section>
+        `;
+
+      const renderTimeline = (title, id, data) => `
+            <section id="${id}" class="fade-in">
+                <div class="container">
+                    <h2 class="section-title">${title}</h2>
+                    <div class="timeline">
+                        ${data
+                          .map(
+                            (item) => `
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="glass-card">
+                                    <div class="timeline-date">${item.year}</div>
+                                    <h3>${item.role || item.degree}</h3>
+                                    <h4>${item.company || item.school}</h4>
+                                    <p class="project-desc">${item.description}</p>
+                                </div>
+                            </div>
+                        `,
+                          )
+                          .join("")}
+                    </div>
+                </div>
+            </section>
+        `;
+
+      const renderProjects = () => {
+        const categories = [
+          "Semua",
+          ...new Set(portfolio.projects.map((p) => p.category)),
+        ];
+
+        return `
+            <section id="projects" class="fade-in">
+                <div class="container">
+                    <h2 class="section-title">Project Saya</h2>
+                    
+                    <div class="project-controls">
+                        <div class="filter-btns">
+                            ${categories
+                              .map(
+                                (cat, i) => `
+                                <button class="filter-btn ${i === 0 ? "active" : ""}" data-filter="${cat}">${cat}</button>
+                            `,
+                              )
+                              .join("")}
+                        </div>
+                        <input type="text" id="search-project" class="search-box" placeholder="Cari project...">
+                    </div>
+
+                    <div class="project-grid" id="project-container">
+                        ${generateProjectCards(portfolio.projects)}
+                    </div>
+                </div>
+            </section>
+            `;
+      };
+
+      const generateProjectCards = (projects) => {
+        if (projects.length === 0)
+          return '<p style="grid-column: 1/-1; text-align: center;">Project tidak ditemukan.</p>';
+        return projects
+          .map(
+            (proj, index) => `
+                <div class="project-card glass-card fade-in" data-category="${proj.category}" data-title="${proj.title.toLowerCase()}">
+                    <img src="${proj.image}" alt="${proj.title}" class="project-img" loading="lazy">
+                    <div class="project-body">
+                        <div class="project-tags">${proj.category} | ${proj.tech}</div>
+                        <h3 class="project-title">${proj.title}</h3>
+                        <p class="project-desc">${proj.description}</p>
+                        <div class="project-actions">
+                            <button class="btn btn-outline btn-sm view-detail-btn" data-index="${index}">Detail</button>
+                            ${proj.demo !== "#" ? `<a href="${proj.demo}" target="_blank" class="btn btn-primary btn-sm">Demo</a>` : ""}
+                        </div>
+                    </div>
+                </div>
+            `,
+          )
+          .join("");
+      };
+
+      const renderCertificates = () => `
+            <section id="certificates" class="fade-in">
+                <div class="container">
+                    <h2 class="section-title">Sertifikat</h2>
+                    <div class="cert-grid">
+                        ${portfolio.certificates
+                          .map(
+                            (cert) => `
+                            <div class="cert-card glass-card">
+                                <img src="${cert.image}" alt="${cert.title}" loading="lazy">
+                                <h4>${cert.title}</h4>
+                            </div>
+                        `,
+                          )
+                          .join("")}
+                    </div>
+                </div>
+            </section>
+        `;
+
+      const renderStatistics = () => `
+            <section id="statistics" class="fade-in">
+                <div class="container glass-card" style="padding: 40px 20px;">
+                    <div class="stats-grid">
+                        ${Object.entries(portfolio.statistics)
+                          .map(([key, val]) => {
+                            const num = val.replace(/\D/g, "");
+                            const suffix = val.replace(/\d/g, "");
+                            return `
+                            <div class="stat-item">
+                                <div class="stat-number" data-target="${num}">0</div>
+                                <div>${key} ${suffix}</div>
+                            </div>
+                            `;
+                          })
+                          .join("")}
+                    </div>
+                </div>
+            </section>
+        `;
+
+      const renderTestimonials = () => `
+            <section id="testimonials" class="fade-in">
+                <div class="container">
+                    <h2 class="section-title">Testimoni</h2>
+                    <div class="testimonial-slider glass-card" id="testi-slider">
+                        ${portfolio.testimonials
+                          .map(
+                            (testi, i) => `
+                            <div class="testi-slide ${i === 0 ? "active" : ""}">
+                                <p class="testi-text">"${testi.text}"</p>
+                                <p class="testi-author">- ${testi.author}</p>
+                            </div>
+                        `,
+                          )
+                          .join("")}
+                    </div>
+                </div>
+            </section>
+        `;
+
+      const renderContact = () => `
+            <section id="contact" class="fade-in">
+                <div class="container">
+                    <h2 class="section-title">Kontak Saya</h2>
+                    <div class="contact-grid">
+                        <a href="mailto:${portfolio.contacts.email}" class="contact-item glass-card" id="copy-email">
+                            <span class="contact-icon">${icons.email}</span> Email
+                        </a>
+                        <a href="https://wa.me/${portfolio.contacts.whatsapp}" target="_blank" class="contact-item glass-card">
+                            <span class="contact-icon">${icons.whatsapp}</span> WhatsApp
+                        </a>
+                        <a href="${portfolio.contacts.linkedin}" target="_blank" class="contact-item glass-card">
+                            <span class="contact-icon">${icons.linkedin}</span> LinkedIn
+                        </a>
+                        <a href="${portfolio.contacts.github}" target="_blank" class="contact-item glass-card">
+                            <span class="contact-icon">${icons.github}</span> GitHub
+                        </a>
+                        <a href="${portfolio.contacts.instagram}" target="_blank" class="contact-item glass-card">
+                            <span class="contact-icon">${icons.instagram}</span> Instagram
+                        </a>
+                    </div>
+                </div>
+            </section>
+        `;
+
+      const buildPage = () => {
+        renderNavbar();
+        app.innerHTML = `
+                ${renderHero()}
+                ${renderAbout()}
+                ${renderSkills()}
+                ${renderTimeline("Pengalaman Kerja", "experience", portfolio.experiences)}
+                ${renderProjects()}
+                ${renderCertificates()}
+                ${renderTimeline("Pendidikan", "education", portfolio.education)}
+                ${renderStatistics()}
+                ${renderTestimonials()}
+                ${renderContact()}
+            `;
+        document.getElementById("footer-text").innerHTML =
+          `&copy; ${new Date().getFullYear()} ${portfolio.profile.name}. All rights reserved.`;
+      };
+
+      /* =========================================================================
+           3. FITUR & ANIMASI (LOGIKA JAVASCRIPT)
+           ========================================================================= */
+
+      // 3.1. Theme Toggle
+      const initTheme = () => {
+        const btn = document.getElementById("theme-toggle");
+        const root = document.documentElement;
+        // Cek preferensi sistem
+        if (
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+        ) {
+          root.setAttribute("data-theme", "dark");
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"
+     width="24"
+     height="24"
+     viewBox="0 0 24 24"
+     fill="none"
+     stroke="currentColor"
+     stroke-width="2"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+  <circle cx="12" cy="12" r="5"/>
+  <line x1="12" y1="1" x2="12" y2="3"/>
+  <line x1="12" y1="21" x2="12" y2="23"/>
+  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+  <line x1="1" y1="12" x2="3" y2="12"/>
+  <line x1="21" y1="12" x2="23" y2="12"/>
+  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+</svg>`;
+        }
+
+        btn.addEventListener("click", () => {
+          const current = root.getAttribute("data-theme");
+          const next = current === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          btn.innerHTML =
+            next === "dark"
+              ? `<svg xmlns="http://www.w3.org/2000/svg"
+     width="24"
+     height="24"
+     viewBox="0 0 24 24"
+     fill="none"
+     stroke="currentColor"
+     stroke-width="2"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+  <circle cx="12" cy="12" r="5"/>
+  <line x1="12" y1="1" x2="12" y2="3"/>
+  <line x1="12" y1="21" x2="12" y2="23"/>
+  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+  <line x1="1" y1="12" x2="3" y2="12"/>
+  <line x1="21" y1="12" x2="23" y2="12"/>
+  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+</svg>`
+              : `<svg xmlns="http://www.w3.org/2000/svg"
+     width="24"
+     height="24"
+     viewBox="0 0 24 24"
+     fill="none"
+     stroke="currentColor"
+     stroke-width="2"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+  <path d="M21 12.79A9 9 0 1 1 11.21 3c0 .34.02.67.06 1A7 7 0 0 0 20 12.73c.33.04.66.06 1 .06z"/>
+</svg>`;
+        });
+      };
+
+      // 3.2. Hamburger Menu & Mobile Nav
+      const initMobileMenu = () => {
+        const hamburger = document.getElementById("hamburger");
+        const navLinks = document.getElementById("nav-links");
+
+        hamburger.addEventListener("click", () => {
+          navLinks.classList.toggle("active");
+        });
+
+        // Tutup menu saat link diklik
+        navLinks.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () =>
+            navLinks.classList.remove("active"),
+          );
+        });
+      };
+
+      // 3.3. Scroll Spy, Fade In, & Progress Bar Animation (Intersection Observer)
+      const initObservers = () => {
+        const sections = document.querySelectorAll("section");
+        const navItems = document.querySelectorAll(".nav-links a");
+
+        // Observer untuk Fade In & Animasi khusus section
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+
+                // Animasi Progress Bar di section skills
+                if (entry.target.id === "skills") {
+                  entry.target.querySelectorAll(".progress").forEach((bar) => {
+                    bar.style.width = bar.getAttribute("data-width");
+                  });
+                }
+
+                // Animasi Counter di section statistics
+                if (
+                  entry.target.id === "statistics" &&
+                  !entry.target.dataset.counted
+                ) {
+                  entry.target.dataset.counted = true;
+                  entry.target
+                    .querySelectorAll(".stat-number")
+                    .forEach((counter) => {
+                      const target = +counter.getAttribute("data-target");
+                      let count = 0;
+                      const updateCount = () => {
+                        const inc = target / 50;
+                        if (count < target) {
+                          count += inc;
+                          counter.innerText = Math.ceil(count);
+                          setTimeout(updateCount, 30);
+                        } else {
+                          counter.innerText = target;
+                        }
+                      };
+                      updateCount();
+                    });
+                }
+              }
+            });
+          },
+          { threshold: 0.15 },
+        );
+
+        sections.forEach((sec) => observer.observe(sec));
+
+        // Observer untuk Scroll Spy (Highlight menu aktif)
+        window.addEventListener("scroll", () => {
+          let current = "";
+          sections.forEach((sec) => {
+            const secTop = sec.offsetTop;
+            if (scrollY >= secTop - 200) current = sec.getAttribute("id");
+          });
+
+          navItems.forEach((li) => {
+            li.classList.remove("active");
+            if (li.getAttribute("href").includes(current)) {
+              li.classList.add("active");
+            }
+          });
+
+          // Tampilkan/Sembunyikan Back To Top
+          const btt = document.getElementById("back-to-top");
+          if (scrollY > 500) btt.style.display = "flex";
+          else btt.style.display = "none";
+        });
+      };
+
+      // 3.4. Typing Animation
+      const initTyping = () => {
+        const el = document.getElementById("typing-text");
+        const words = portfolio.profile.profession;
+        let i = 0,
+          j = 0,
+          isDeleting = false;
+
+        const type = () => {
+          const currentWord = words[i];
+          if (isDeleting) {
+            el.textContent = currentWord.substring(0, j - 1);
+            j--;
+          } else {
+            el.textContent = currentWord.substring(0, j + 1);
+            j++;
+          }
+
+          let speed = isDeleting ? 50 : 100;
+
+          if (!isDeleting && j === currentWord.length) {
+            speed = 2000; // Pause at end of word
+            isDeleting = true;
+          } else if (isDeleting && j === 0) {
+            isDeleting = false;
+            i = (i + 1) % words.length; // Next word
+            speed = 500; // Pause before typing next
+          }
+          setTimeout(type, speed);
+        };
+        type();
+      };
+
+      // 3.5. Project Filter & Search
+      const initProjectFilters = () => {
+        const filterBtns = document.querySelectorAll(".filter-btn");
+        const searchBox = document.getElementById("search-project");
+        const container = document.getElementById("project-container");
+
+        const filterProjects = () => {
+          const activeCat = document
+            .querySelector(".filter-btn.active")
+            .getAttribute("data-filter");
+          const searchTerm = searchBox.value.toLowerCase();
+
+          const filtered = portfolio.projects.filter((p) => {
+            const matchCat = activeCat === "Semua" || p.category === activeCat;
+            const matchSearch =
+              p.title.toLowerCase().includes(searchTerm) ||
+              p.description.toLowerCase().includes(searchTerm);
+            return matchCat && matchSearch;
+          });
+
+          container.innerHTML = generateProjectCards(filtered);
+
+          // Re-init ripple & modal on new elements
+          initRipple();
+          initModalListeners();
+
+          // Add tiny delay for animation
+          setTimeout(() => {
+            container
+              .querySelectorAll(".project-card")
+              .forEach((card) => card.classList.add("visible"));
+          }, 50);
+        };
+
+        filterBtns.forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            filterBtns.forEach((b) => b.classList.remove("active"));
+            e.target.classList.add("active");
+            filterProjects();
+          });
+        });
+
+        searchBox.addEventListener("input", filterProjects);
+
+        filterProjects();
+      };
+
+      // 3.6. Custom Cursor
+      const initCursor = () => {
+        const cursor = document.getElementById("cursor");
+        if (window.innerWidth <= 768) return; // Disable on mobile
+
+        window.addEventListener("mousemove", (e) => {
+          cursor.style.left = e.clientX + "px";
+          cursor.style.top = e.clientY + "px";
+        });
+
+        document.querySelectorAll("a, button").forEach((el) => {
+          el.addEventListener("mouseenter", () =>
+            cursor.classList.add("hovering"),
+          );
+          el.addEventListener("mouseleave", () =>
+            cursor.classList.remove("hovering"),
+          );
+        });
+      };
+
+      // 3.7. Ripple Effect
+      const initRipple = () => {
+        const buttons = document.querySelectorAll(".ripple-effect, .btn");
+        buttons.forEach((btn) => {
+          btn.addEventListener("click", function (e) {
+            let x = e.clientX - e.target.getBoundingClientRect().left;
+            let y = e.clientY - e.target.getBoundingClientRect().top;
+            let ripples = document.createElement("span");
+            ripples.style.left = x + "px";
+            ripples.style.top = y + "px";
+            ripples.classList.add("ripple");
+            this.appendChild(ripples);
+            setTimeout(() => ripples.remove(), 600);
+          });
+        });
+      };
+
+      // 3.8. Testimonial Slider
+      const initSlider = () => {
+        const slides = document.querySelectorAll(".testi-slide");
+        if (slides.length === 0) return;
+        let current = 0;
+        setInterval(() => {
+          slides[current].classList.remove("active");
+          current = (current + 1) % slides.length;
+          slides[current].classList.add("active");
+        }, 5000);
+      };
+
+      // 3.9. Toast Notification
+      // const showToast = (message) => {
+      //   const container = document.getElementById("toast-container");
+      //   const toast = document.createElement("div");
+      //   toast.className = "toast";
+      //   toast.textContent = message;
+      //   container.appendChild(toast);
+      //   setTimeout(() => toast.remove(), 3000);
+      // };
+      // 3.9. Toast Notification (iPhone Style)
+      const showToast = (message) => {
+        const container = document.getElementById("toast-container");
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        // Menambahkan ikon dan pesan
+        toast.innerHTML = `<span>${message}</span>`;
+
+        container.appendChild(toast);
+
+        // Hapus elemen setelah animasi selesai (total animasi + durasi tampil sekitar 4 detik)
+        setTimeout(() => toast.remove(), 4000);
+      };
+
+      // 3.10. Project Modal
+      const initModalListeners = () => {
+        const modal = document.getElementById("project-modal");
+        const modalBody = document.getElementById("modal-body");
+
+        document.querySelectorAll(".view-detail-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const index = e.target.getAttribute("data-index");
+            // Karena index bisa berubah saat filter, lebih baik cari dari title.
+            // Kita asumsikan struktur grid saat ini.
+            const card = e.target.closest(".project-card");
+            const title = card.querySelector(".project-title").textContent;
+            const proj = portfolio.projects.find((p) => p.title === title);
+
+            if (proj) {
+              modalBody.innerHTML = `
+                            <h2>${proj.title}</h2>
+                            <p class="project-tags" style="margin-top:10px">${proj.category} | ${proj.tech}</p>
+                            <img src="${proj.image}" alt="${proj.title}" style="width:100%; border-radius:8px; margin: 15px 0;">
+                            <p>${proj.description}</p>
+                            <div style="margin-top: 20px; display:flex; gap:10px;">
+                                ${proj.demo !== "#" ? `<a href="${proj.demo}" target="_blank" class="btn btn-primary">Lihat Demo</a>` : ""}
+                                ${proj.github !== "#" ? `<a href="${proj.github}" target="_blank" class="btn btn-outline">Source Code</a>` : ""}
+                            </div>
+                        `;
+              modal.classList.add("active");
+            }
+          });
+        });
+      };
+
+      const initModal = () => {
+        const modal = document.getElementById("project-modal");
+        document
+          .getElementById("close-modal")
+          .addEventListener("click", () => modal.classList.remove("active"));
+        window.addEventListener("click", (e) => {
+          if (e.target === modal) modal.classList.remove("active");
+        });
+        initModalListeners();
+      };
+
+      // 3.11. Copy Email Feature
+      const initCopyEmail = () => {
+        const emailBtn = document.getElementById("copy-email");
+        emailBtn.addEventListener("click", (e) => {
+          e.preventDefault(); // Mencegah membuka mail client langsung (opsional)
+          navigator.clipboard.writeText(portfolio.contacts.email).then(() => {
+            showToast("Email berhasil disalin ke clipboard!");
+          });
+        });
+      };
+
+      // 3.12. Back To Top
+      document.getElementById("back-to-top").addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      /* =========================================================================
+           4. INISIALISASI UTAMA
+           ========================================================================= */
+      window.addEventListener("DOMContentLoaded", () => {
+        // 1. Build DOM
+        buildPage();
+
+        // 2. Initialize Features
+        initTheme();
+        initMobileMenu();
+        initTyping();
+        initProjectFilters();
+        initModal();
+        initCopyEmail();
+        initSlider();
+
+        // 3. Remove loader & Start Observes
+        window.onload = () => {
+          document.getElementById("loader").style.opacity = "0";
+          setTimeout(() => {
+            document.getElementById("loader").style.display = "none";
+            initObservers();
+            initCursor();
+            initRipple();
+            showToast("Selamat datang di portofolio saya!");
+          }, 500);
+        };
+      });
+    </script>
+  </body>
+</html>
